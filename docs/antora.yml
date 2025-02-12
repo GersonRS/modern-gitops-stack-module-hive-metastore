@@ -1,6 +1,6 @@
 ---
-name: "template"
-title: "Template Module"
+name: "hivemetastore"
+title: "Hive MetaStore Module"
 version: true
 start_page: README.adoc
 nav:

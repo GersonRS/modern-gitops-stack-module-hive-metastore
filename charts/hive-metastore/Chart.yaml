@@ -1,0 +1,9 @@
+apiVersion: v2
+name: hive-metastore
+description: |
+  This chart installs hive-metastore
+version: "0"
+dependencies:
+  - name: hive-metastore
+    repository: https://hevaweb.github.io/heva-helm-charts/
+    version: "0.1.0"

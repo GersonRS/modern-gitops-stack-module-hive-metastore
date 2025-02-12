@@ -1,0 +1,6 @@
+dependencies:
+- name: hive-metastore
+  repository: https://hevaweb.github.io/heva-helm-charts/
+  version: 0.1.0
+digest: sha256:f49dfd99619ad53d200d41db3540983505a57ebbc1c22722c659ab7c84b1d0ad
+generated: "2025-02-12T10:40:36.70072727-03:00"

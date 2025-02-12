@@ -12,6 +12,13 @@ variable "base_domain" {
   type        = string
 }
 
+variable "subdomain" {
+  description = "Subdomain of the cluster. Value used for the ingress' URL of the application."
+  type        = string
+  default     = "apps"
+  nullable    = false
+}
+
 variable "argocd_project" {
   description = "Name of the Argo CD AppProject where the Application should be created. If not set, the Application will be created in a new AppProject only for this Application."
   type        = string
@@ -33,13 +40,19 @@ variable "destination_cluster" {
 variable "target_revision" {
   description = "Override of target revision of the application chart."
   type        = string
-  default     = "v1.0.0" # x-release-please-version
+  default     = "v2.6.0" # x-release-please-version
 }
 
 variable "cluster_issuer" {
   description = "SSL certificate issuer to use. Usually you would configure this value as `letsencrypt-staging` or `letsencrypt-prod` on your root `*.tf` files."
   type        = string
   default     = "selfsigned-issuer"
+}
+
+variable "enable_service_monitor" {
+  description = "Enable Prometheus ServiceMonitor in the Helm chart."
+  type        = bool
+  default     = true
 }
 
 variable "helm_values" {
@@ -67,6 +80,36 @@ variable "dependency_ids" {
   type        = map(string)
   default     = {}
 }
+
+variable "replicas" {
+  description = "Number of replicas for module"
+  type        = number
+  default     = 3
+}
+
+variable "resources" {
+  description = <<-EOT
+    Resource limits and requests for module components. Follow the style on https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[official documentation] to understand the format of the values.
+
+    IMPORTANT: These are not production values. You should always adjust them to your needs.
+  EOT
+  type = object({
+
+    controller = optional(object({
+      requests = optional(object({
+        cpu    = optional(string, "250m")
+        memory = optional(string, "256Mi")
+      }), {})
+      limits = optional(object({
+        cpu    = optional(string, "500m")
+        memory = optional(string, "512Mi")
+      }), {})
+    }), {})
+
+  })
+  default = {}
+}
+
 
 #######################
 ## Module variables

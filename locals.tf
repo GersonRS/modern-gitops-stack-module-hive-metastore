@@ -7,7 +7,7 @@ locals {
         tag        = "deepstore-hive-1.0.0"
       }
       serviceAccount = {
-        create : true
+        create = true
       }
       service = {
         type = ClusterIP

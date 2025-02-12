@@ -2,8 +2,8 @@ locals {
   helm_values = [{
     hive-metastore = {
       image = {
-        repository = 334077612733.dkr.ecr.sa-east-1.amazonaws.com / solinftec / orion
-        pullPolicy = Always
+        repository = "334077612733.dkr.ecr.sa-east-1.amazonaws.com/solinftec/orion"
+        pullPolicy = "Always"
         tag        = "deepstore-hive-1.0.0"
       }
       serviceAccount = {
@@ -14,9 +14,9 @@ locals {
         port = 9083
       }
       ingress = {
-        enabled : false
+        enabled = false
       }
-      resources : {}
+      resources = {}
       # limits:
       #   cpu: 100m
       #   memory: 128Mi

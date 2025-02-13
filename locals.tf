@@ -48,17 +48,17 @@ locals {
           ]
         }]
       }
-      resources = {
-        requests = { for k, v in var.resources.requests : k => v if v != null }
-        limits   = { for k, v in var.resources.limits : k => v if v != null }
-      }
+      # resources = {
+      #   requests = { for k, v in var.resources.requests : k => v if v != null }
+      #   limits   = { for k, v in var.resources.limits : k => v if v != null }
+      # }
       connections = {
         database = {
-          # username = "${var.database.user}"
-          password = "hive"
-          # database = "${var.database.database}"
-          # host     = "${var.database.service}"
-          # port     = 5432
+          username = "${var.database.user}"
+          password = "${var.database.password}"
+          database = "${var.database.database}"
+          host     = "${var.database.service}"
+          port     = 5432
         }
       }
       conf = {
@@ -85,7 +85,7 @@ locals {
         }
       }
       postgresql = {
-        enabled = true
+        enabled = false
       }
     }
   }]

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/compare/v1.0.0...v1.1.0) (2025-02-13)
+
+
+### 🚀 New Features
+
+* my first commit ([7baf12e](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/7baf12e93056f02cd24aea2e8ecb7ab69e0f9f2f))
+
+
+### 🔥 Bug Fixes
+
+* adjust code ([f0e77c8](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/f0e77c825aecf9979098be90bbf3a4fc09d97c83))
+* adjust code ([e686537](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/e686537ca4cb99e573d59af53834482cb34b0277))
+* fix code and install pre-commit ([21eba83](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/21eba8353b69a008369575298f8af27d3b16f887))
+
 ## [1.1.1](https://github.com/GersonRS/modern-gitops-stack-module-mlflow/compare/v1.1.0...v1.1.1) (2024-08-08)
 
 

@@ -86,7 +86,12 @@ locals {
     }
     postgresql = {
       enabled = false
+      primary = {
+        persistence = {
+          enabled      = false
+          storageClass = "standard"
+        }
+      }
     }
-
   }]
 }

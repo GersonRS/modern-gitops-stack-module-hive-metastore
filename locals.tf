@@ -3,11 +3,11 @@ locals {
   domain_full = format("hive-metastore.%s.%s", trimprefix("${var.subdomain}.${var.cluster_name}", "."), var.base_domain)
 
   helm_values = [{
-    # image = {
-    #   repository = "334077612733.dkr.ecr.sa-east-1.amazonaws.com/solinftec/orion"
-    #   pullPolicy = "Always"
-    #   tag        = "deepstore-hive-1.0.0"
-    # }
+    image = {
+      repository = "sslhep/hive-metastore"
+      pullPolicy = "IfNotPresent"
+      tag        = "3.1.3"
+    }
     serviceAccount = {
       create = true
     }

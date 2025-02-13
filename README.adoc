@@ -58,7 +58,7 @@ This module must be one of the first ones to be deployed and consequently it nee
 
 The following requirements are needed by this module:
 
-- [[requirement_argocd]] <<requirement_argocd,argocd>> (>= 5)
+- [[requirement_argocd]] <<requirement_argocd,argocd>> (>= 6)
 
 - [[requirement_null]] <<requirement_null,null>> (>= 3)
 
@@ -68,18 +68,18 @@ The following requirements are needed by this module:
 
 The following providers are used by this module:
 
-- [[provider_null]] <<provider_null,null>> (>= 3)
-
 - [[provider_utils]] <<provider_utils,utils>> (>= 1)
 
-- [[provider_argocd]] <<provider_argocd,argocd>> (>= 5)
+- [[provider_argocd]] <<provider_argocd,argocd>> (>= 6)
+
+- [[provider_null]] <<provider_null,null>> (>= 3)
 
 === Resources
 
 The following resources are used by this module:
 
-- https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/application[argocd_application.this] (resource)
-- https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project[argocd_project.this] (resource)
+- https://registry.terraform.io/providers/argoproj-labs/argocd/latest/docs/resources/application[argocd_application.this] (resource)
+- https://registry.terraform.io/providers/argoproj-labs/argocd/latest/docs/resources/project[argocd_project.this] (resource)
 - https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource[null_resource.dependencies] (resource)
 - https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource[null_resource.this] (resource)
 - https://registry.terraform.io/providers/cloudposse/utils/latest/docs/data-sources/deep_merge_yaml[utils_deep_merge_yaml.values] (data source)
@@ -103,6 +103,14 @@ Type: `string`
 === Optional Inputs
 
 The following input variables are optional (have default values):
+
+==== [[input_subdomain]] <<input_subdomain,subdomain>>
+
+Description: Subdomain of the cluster. Value used for the ingress' URL of the application.
+
+Type: `string`
+
+Default: `"apps"`
 
 ==== [[input_argocd_project]] <<input_argocd_project,argocd_project>>
 
@@ -134,7 +142,7 @@ Description: Override of target revision of the application chart.
 
 Type: `string`
 
-Default: `"v1.0.0"`
+Default: `"v1.1.0"`
 
 ==== [[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
 
@@ -143,6 +151,14 @@ Description: SSL certificate issuer to use. Usually you would configure this val
 Type: `string`
 
 Default: `"selfsigned-issuer"`
+
+==== [[input_enable_service_monitor]] <<input_enable_service_monitor,enable_service_monitor>>
+
+Description: Enable Prometheus ServiceMonitor in the Helm chart.
+
+Type: `bool`
+
+Default: `true`
 
 ==== [[input_helm_values]] <<input_helm_values,helm_values>>
 
@@ -184,6 +200,41 @@ Type: `map(string)`
 
 Default: `{}`
 
+==== [[input_replicas]] <<input_replicas,replicas>>
+
+Description: Number of replicas for module
+
+Type: `number`
+
+Default: `3`
+
+==== [[input_resources]] <<input_resources,resources>>
+
+Description: Resource limits and requests for module components. Follow the style on https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[official documentation] to understand the format of the values.
+
+IMPORTANT: These are not production values. You should always adjust them to your needs.
+
+Type:
+[source,hcl]
+----
+object({
+
+    controller = optional(object({
+      requests = optional(object({
+        cpu    = optional(string, "250m")
+        memory = optional(string, "256Mi")
+      }), {})
+      limits = optional(object({
+        cpu    = optional(string, "500m")
+        memory = optional(string, "512Mi")
+      }), {})
+    }), {})
+
+  })
+----
+
+Default: `{}`
+
 === Outputs
 
 The following outputs are exported:
@@ -204,7 +255,7 @@ Description: ID to pass other modules in order to refer to this module as a depe
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Version
-|[[requirement_argocd]] <<requirement_argocd,argocd>> |>= 5
+|[[requirement_argocd]] <<requirement_argocd,argocd>> |>= 6
 |[[requirement_null]] <<requirement_null,null>> |>= 3
 |[[requirement_utils]] <<requirement_utils,utils>> |>= 1
 |===
@@ -215,7 +266,7 @@ Description: ID to pass other modules in order to refer to this module as a depe
 |===
 |Name |Version
 |[[provider_null]] <<provider_null,null>> |>= 3
-|[[provider_argocd]] <<provider_argocd,argocd>> |>= 5
+|[[provider_argocd]] <<provider_argocd,argocd>> |>= 6
 |[[provider_utils]] <<provider_utils,utils>> |>= 1
 |===
 
@@ -224,8 +275,8 @@ Description: ID to pass other modules in order to refer to this module as a depe
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Type
-|https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/application[argocd_application.this] |resource
-|https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project[argocd_project.this] |resource
+|https://registry.terraform.io/providers/argoproj-labs/argocd/latest/docs/resources/application[argocd_application.this] |resource
+|https://registry.terraform.io/providers/argoproj-labs/argocd/latest/docs/resources/project[argocd_project.this] |resource
 |https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource[null_resource.dependencies] |resource
 |https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource[null_resource.this] |resource
 |https://registry.terraform.io/providers/cloudposse/utils/latest/docs/data-sources/deep_merge_yaml[utils_deep_merge_yaml.values] |data source
@@ -248,6 +299,12 @@ Description: ID to pass other modules in order to refer to this module as a depe
 |n/a
 |yes
 
+|[[input_subdomain]] <<input_subdomain,subdomain>>
+|Subdomain of the cluster. Value used for the ingress' URL of the application.
+|`string`
+|`"apps"`
+|no
+
 |[[input_argocd_project]] <<input_argocd_project,argocd_project>>
 |Name of the Argo CD AppProject where the Application should be created. If not set, the Application will be created in a new AppProject only for this Application.
 |`string`
@@ -269,13 +326,19 @@ Description: ID to pass other modules in order to refer to this module as a depe
 |[[input_target_revision]] <<input_target_revision,target_revision>>
 |Override of target revision of the application chart.
 |`string`
-|`"v1.0.0"`
+|`"v1.1.0"`
 |no
 
 |[[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
 |SSL certificate issuer to use. Usually you would configure this value as `letsencrypt-staging` or `letsencrypt-prod` on your root `*.tf` files.
 |`string`
 |`"selfsigned-issuer"`
+|no
+
+|[[input_enable_service_monitor]] <<input_enable_service_monitor,enable_service_monitor>>
+|Enable Prometheus ServiceMonitor in the Helm chart.
+|`bool`
+|`true`
 |no
 
 |[[input_helm_values]] <<input_helm_values,helm_values>>
@@ -313,6 +376,40 @@ object({
 |[[input_dependency_ids]] <<input_dependency_ids,dependency_ids>>
 |IDs of the other modules on which this module depends on.
 |`map(string)`
+|`{}`
+|no
+
+|[[input_replicas]] <<input_replicas,replicas>>
+|Number of replicas for module
+|`number`
+|`3`
+|no
+
+|[[input_resources]] <<input_resources,resources>>
+|Resource limits and requests for module components. Follow the style on https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[official documentation] to understand the format of the values.
+
+IMPORTANT: These are not production values. You should always adjust them to your needs.
+
+|
+
+[source]
+----
+object({
+
+    controller = optional(object({
+      requests = optional(object({
+        cpu    = optional(string, "250m")
+        memory = optional(string, "256Mi")
+      }), {})
+      limits = optional(object({
+        cpu    = optional(string, "500m")
+        memory = optional(string, "512Mi")
+      }), {})
+    }), {})
+
+  })
+----
+
 |`{}`
 |no
 

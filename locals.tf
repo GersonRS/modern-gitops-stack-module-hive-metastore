@@ -13,7 +13,7 @@ locals {
         create = true
       }
       service = {
-        type = ClusterIP
+        type = "ClusterIP"
         port = 9083
       }
       ingress = {

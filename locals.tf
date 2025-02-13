@@ -63,8 +63,8 @@ locals {
       }
       conf = {
         hiveSite = {
-          hive.metastore.warehouse.dir          = "s3a://warehouse/metastore"
-          javax.jdo.option.ConnectionDriverName = "org.postgresql.Driver"
+          hive.metastore.warehouse.dir            = "s3a://warehouse/metastore"
+          "javax.jdo.option.ConnectionDriverName" = "org.postgresql.Driver"
         }
       }
       objectStore = {

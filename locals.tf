@@ -48,10 +48,10 @@ locals {
           ]
         }]
       }
-      resources = {
-        requests = { for k, v in var.resources.requests : k => v if v != null }
-        limits   = { for k, v in var.resources.limits : k => v if v != null }
-      }
+      # resources = {
+      #   requests = { for k, v in var.resources.requests : k => v if v != null }
+      #   limits   = { for k, v in var.resources.limits : k => v if v != null }
+      # }
       connections = {
         database = {
           # password = "hive"
@@ -79,10 +79,10 @@ locals {
       log = {
         level = {
           meta           = "debug"
-          hive           = "info"
-          datanucleusorg = "info"
-          datanucleus    = "info"
-          root           = "info"
+          hive           = "debug"
+          datanucleusorg = "debug"
+          datanucleus    = "debug"
+          root           = "debug"
         }
       }
       postgresql = {

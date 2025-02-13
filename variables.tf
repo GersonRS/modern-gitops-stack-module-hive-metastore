@@ -94,18 +94,14 @@ variable "resources" {
     IMPORTANT: These are not production values. You should always adjust them to your needs.
   EOT
   type = object({
-
-    controller = optional(object({
-      requests = optional(object({
-        cpu    = optional(string, "250m")
-        memory = optional(string, "256Mi")
-      }), {})
-      limits = optional(object({
-        cpu    = optional(string, "500m")
-        memory = optional(string, "512Mi")
-      }), {})
+    requests = optional(object({
+      cpu    = optional(string, "100m")
+      memory = optional(string, "256Mi")
     }), {})
-
+    limits = optional(object({
+      cpu    = optional(string, "1000m")
+      memory = optional(string, "512Mi")
+    }), {})
   })
   default = {}
 }
@@ -114,3 +110,23 @@ variable "resources" {
 #######################
 ## Module variables
 #######################
+
+variable "storage" {
+  description = "MinIO S3 bucket configuration values for the bucket where the archived metrics will be stored."
+  type = object({
+    bucket_name       = string
+    endpoint          = string
+    access_key        = string
+    secret_access_key = string
+  })
+}
+
+variable "database" {
+  description = "database configuration"
+  type = object({
+    user     = string
+    password = string
+    database = string
+    service  = string
+  })
+}

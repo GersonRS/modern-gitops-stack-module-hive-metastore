@@ -96,11 +96,11 @@ variable "resources" {
   type = object({
     requests = optional(object({
       cpu    = optional(string, "100m")
-      memory = optional(string, "128Mi")
+      memory = optional(string, "256Mi")
     }), {})
     limits = optional(object({
-      cpu    = optional(string, "250m")
-      memory = optional(string, "256Mi")
+      cpu    = optional(string, "1000m")
+      memory = optional(string, "512Mi")
     }), {})
   })
   default = {}

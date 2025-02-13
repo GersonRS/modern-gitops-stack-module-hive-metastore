@@ -68,11 +68,11 @@ The following requirements are needed by this module:
 
 The following providers are used by this module:
 
-- [[provider_utils]] <<provider_utils,utils>> (>= 1)
+- [[provider_null]] <<provider_null,null>> (>= 3)
 
 - [[provider_argocd]] <<provider_argocd,argocd>> (>= 6)
 
-- [[provider_null]] <<provider_null,null>> (>= 3)
+- [[provider_utils]] <<provider_utils,utils>> (>= 1)
 
 === Resources
 
@@ -99,6 +99,36 @@ Type: `string`
 Description: Base domain of the cluster. Value used for the ingress' URL of the application.
 
 Type: `string`
+
+==== [[input_storage]] <<input_storage,storage>>
+
+Description: MinIO S3 bucket configuration values for the bucket where the archived metrics will be stored.
+
+Type:
+[source,hcl]
+----
+object({
+    bucket_name       = string
+    endpoint          = string
+    access_key        = string
+    secret_access_key = string
+  })
+----
+
+==== [[input_database]] <<input_database,database>>
+
+Description: database configuration
+
+Type:
+[source,hcl]
+----
+object({
+    user     = string
+    password = string
+    database = string
+    service  = string
+  })
+----
 
 === Optional Inputs
 
@@ -142,7 +172,7 @@ Description: Override of target revision of the application chart.
 
 Type: `string`
 
-Default: `"v1.1.0"`
+Default: `"v1.2.0"`
 
 ==== [[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
 
@@ -218,18 +248,14 @@ Type:
 [source,hcl]
 ----
 object({
-
-    controller = optional(object({
-      requests = optional(object({
-        cpu    = optional(string, "250m")
-        memory = optional(string, "256Mi")
-      }), {})
-      limits = optional(object({
-        cpu    = optional(string, "500m")
-        memory = optional(string, "512Mi")
-      }), {})
+    requests = optional(object({
+      cpu    = optional(string, "100m")
+      memory = optional(string, "256Mi")
     }), {})
-
+    limits = optional(object({
+      cpu    = optional(string, "1000m")
+      memory = optional(string, "512Mi")
+    }), {})
   })
 ----
 
@@ -326,7 +352,7 @@ Description: ID to pass other modules in order to refer to this module as a depe
 |[[input_target_revision]] <<input_target_revision,target_revision>>
 |Override of target revision of the application chart.
 |`string`
-|`"v1.1.0"`
+|`"v1.2.0"`
 |no
 
 |[[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
@@ -395,23 +421,53 @@ IMPORTANT: These are not production values. You should always adjust them to you
 [source]
 ----
 object({
-
-    controller = optional(object({
-      requests = optional(object({
-        cpu    = optional(string, "250m")
-        memory = optional(string, "256Mi")
-      }), {})
-      limits = optional(object({
-        cpu    = optional(string, "500m")
-        memory = optional(string, "512Mi")
-      }), {})
+    requests = optional(object({
+      cpu    = optional(string, "100m")
+      memory = optional(string, "256Mi")
     }), {})
-
+    limits = optional(object({
+      cpu    = optional(string, "1000m")
+      memory = optional(string, "512Mi")
+    }), {})
   })
 ----
 
 |`{}`
 |no
+
+|[[input_storage]] <<input_storage,storage>>
+|MinIO S3 bucket configuration values for the bucket where the archived metrics will be stored.
+|
+
+[source]
+----
+object({
+    bucket_name       = string
+    endpoint          = string
+    access_key        = string
+    secret_access_key = string
+  })
+----
+
+|n/a
+|yes
+
+|[[input_database]] <<input_database,database>>
+|database configuration
+|
+
+[source]
+----
+object({
+    user     = string
+    password = string
+    database = string
+    service  = string
+  })
+----
+
+|n/a
+|yes
 
 |===
 

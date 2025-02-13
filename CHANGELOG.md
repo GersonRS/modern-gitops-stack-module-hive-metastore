@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.2.0](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/compare/v1.1.0...v1.2.0) (2025-02-13)
+
+
+### 🚀 New Features
+
+* adjust resources ([95c36ce](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/95c36ce1147ab16a5ad7ae57c4933faa552dd77f))
+* adjust resources and ingress ([8b3cd7e](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/8b3cd7e402234076b7ab6973d7b726865a69332b))
+
+
+### 🔥 Bug Fixes
+
+* fix config ([6c7aef8](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/6c7aef8718b6ed9769f241a6edf5c6b815e33d0a))
+* fix config ([9811ba9](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/9811ba917663767b71450f7109c7c28bde143625))
+* fix config ([022bb0a](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/022bb0adcb949523388602c5230d9792a18d86c8))
+* fix config ([3a982df](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/3a982df29838db4323b3a73ce9b6fcba006fdc2f))
+* fix config ([1df28cd](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/1df28cd25a38c8322a795e291bf0fd1d71df539a))
+* fix config ([bb98bea](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/bb98bea2d83fb30d97c7e13a73d7464eb201e95a))
+* fix config ([a28b5bd](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/a28b5bd2c2eddf24d2f6fcb48d9f0c8d8dbd7765))
+* fix config ([4f80117](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/4f80117494b511921ce618d7d70caf8652efa1a9))
+* fix config ([fde0620](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/fde0620bfa35f03e19ac4c16a4c7639bf34219e2))
+* fix config ([d676f00](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/d676f0009f3e65836aa89d65042831bc30a425e3))
+* fix persistence postgres ([2ba366c](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/2ba366c3ee36e161f22ac3f01403f1f5000321e8))
+* fix persistence postgres ([ad5e09d](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/ad5e09ddc09bcf08946255d0e4e89162f67aa0ab))
+* fix username postgres ([b667617](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/b6676174d4ac25e5ecaa0321b833defb0ef4f288))
+* fix username postgres ([764d2f1](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/764d2f1786bdc56e3a7e5f3796bbc2525ff4fafd))
+* fix username postgres ([79925b6](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/79925b6e21842d03d24e28b507bf661a891546d7))
+* fix username postgres ([9f7ad42](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/9f7ad42779e40bc287af34ffb60d75967bfb6c07))
+* fix username postgres ([855140f](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/855140f4321a18581edfc2611202b1fe29610326))
+* fix username postgres ([252301e](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/commit/252301ea898d5ef1f6b72c966833d6a4c2a23c33))
+
 ## [1.1.0](https://github.com/GersonRS/modern-gitops-stack-module-hive-metastore/compare/v1.0.0...v1.1.0) (2025-02-13)
 
 

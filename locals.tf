@@ -1,11 +1,14 @@
 locals {
+  domain      = format("hive-metastore.%s", trimprefix("${var.subdomain}.${var.base_domain}", "."))
+  domain_full = format("hive-metastore.%s.%s", trimprefix("${var.subdomain}.${var.cluster_name}", "."), var.base_domain)
+
   helm_values = [{
     hive-metastore = {
-      image = {
-        repository = "334077612733.dkr.ecr.sa-east-1.amazonaws.com/solinftec/orion"
-        pullPolicy = "Always"
-        tag        = "deepstore-hive-1.0.0"
-      }
+      # image = {
+      #   repository = "334077612733.dkr.ecr.sa-east-1.amazonaws.com/solinftec/orion"
+      #   pullPolicy = "Always"
+      #   tag        = "deepstore-hive-1.0.0"
+      # }
       serviceAccount = {
         create = true
       }
@@ -14,35 +17,47 @@ locals {
         port = 9083
       }
       ingress = {
-        enabled = false
-      }
-      resources = {}
-      # limits:
-      #   cpu: 100m
-      #   memory: 128Mi
-      # requests:
-      #   cpu: 100m
-      #   memory: 128Mi
-      affinity = {
-        nodeAffinity = {
-          requiredDuringSchedulingIgnoredDuringExecution = {
-            nodeSelectorTerms = [{
-              matchExpressions = {
-                key      = "ng-workgroup"
-                operator = "In"
-                values   = ["storage"]
-              }
+        enabled : true
+        className : "traefik"
+        annotations = {
+          "cert-manager.io/cluster-issuer"                   = "${var.cluster_issuer}"
+          "traefik.ingress.kubernetes.io/router.entrypoints" = "websecure"
+          "traefik.ingress.kubernetes.io/router.tls"         = "true"
+        }
+        hosts = [
+          {
+            host = local.domain
+            paths = [{
+              path     = "/"
+              pathType = "ImplementationSpecific"
+            }]
+          },
+          {
+            host = local.domain_full
+            paths = [{
+              path     = "/"
+              pathType = "ImplementationSpecific"
             }]
           }
-        }
+        ]
+        tls = [{
+          secretName = "hive-metastore-ingres-tls"
+          hosts = [
+            local.domain,
+            local.domain_full
+          ]
+        }]
       }
-
+      resources = {
+        requests = { for k, v in var.resources.requests : k => v if v != null }
+        limits   = { for k, v in var.resources.limits : k => v if v != null }
+      }
       connections = {
         database = {
-          username = "usr_hive"
-          password = "YO4youuteNFgrc7Hoo"
-          database = "hive_metastore"
-          host     = "log-hive-metastore-prod-br.c90iouqmac88.sa-east-1.rds.amazonaws.com"
+          username = "${var.database.user}"
+          password = "${var.database.password}"
+          database = "${var.database.database}"
+          host     = "${var.database.service}"
           port     = 5432
         }
       }
@@ -54,9 +69,9 @@ locals {
       }
       objectStore = {
         sslEnabled      = false
-        endpoint        = "http://bigdata-storage-hl.deepstore-bigdata.svc.cluster.local:9000"
-        accessKeyId     = "hive-ds-bg"
-        secretAccessKey = "hiv@9931ms-sec"
+        endpoint        = "http://${var.storage.endpoint}"
+        accessKeyId     = "${var.storage.access_key}"
+        secretAccessKey = "${var.storage.secret_access_key}"
         pathStyle       = true
         impl            = "org.apache.hadoop.fs.s3a.S3AFileSystem"
       }
@@ -71,29 +86,6 @@ locals {
       }
       postgresql = {
         enabled = false
-        # global:
-        #   postgresql:
-        #     auth:
-        #       username: admin
-        #       password: admin
-        #       database: metastore_db
-        primary = {
-          persistence = {
-            enabled      = false
-            storageClass = gp2
-            accessModes = [
-              "ReadWriteOnce"
-            ]
-          }
-          extendedConfiguration = [
-            "password_encryption=md5"
-          ]
-          service = {
-            ports = {
-              postgresql = "5432"
-            }
-          }
-        }
       }
     }
   }]

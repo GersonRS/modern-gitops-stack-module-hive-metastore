@@ -14,17 +14,29 @@ spec:
           - schematool
            --verbose
            -initSchema
+           -ifNotExists
            -dbType postgres
            -userName "{{- .Values.connections.database.username }}"
-           -passWord "{{- .Values.connections.database.password }}"
+           -passWord "$DATABASE_PASSWORD"
            -url "jdbc:postgresql://{{- tpl .Values.connections.database.host . }}:{{- .Values.connections.database.port }}/{{- .Values.connections.database.database }}"
         volumeMounts:
         - name: hive-config
           mountPath: /opt/hive-metastore/conf
         env:
           {{- if .Values.extraEnvVars }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+          {{- .Values.extraEnvVars | nindent 12 }}
           {{- end }}
+          {{- if .Values.connections.database.password }}
+          - name: DATABASE_PASSWORD
+            value: "{{- .Values.connections.database.password }}"
+          {{- end }}
+        {{- if .Values.extraEnvVarsSecret }}
+        envFrom:
+          {{- if .Values.extraEnvVarsSecret }}
+          - secretRef:
+              name: "{{- .Values.extraEnvVarsSecret }}"
+          {{- end }}
+        {{- end }}
       volumes:
       - name: hive-config
         configMap:

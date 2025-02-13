@@ -8,8 +8,8 @@
 ## @param image.pullPolicy Docker image pull policy
 ## @param image.tag Docker image tag (immutable tags are recommended)
 image:
-  repository: sslhep/hive-metastore # sslhep/hive-metastore #
-  pullPolicy: Always
+  repository: sslhep/hive-metastore
+  pullPolicy: IfNotPresent
   tag: "3.1.3"
 
 ## @param imagePullSecrets Docker registry secret names as an array
@@ -112,7 +112,14 @@ tolerations: []
 affinity: {}
 
 ## @param extraEnvVars Extra environment variables passed to Hive pods
-extraEnvVars: []
+# e.g.
+# extraEnvVars: |
+#   - name: SOME_VAR
+#     value: SOME_VALUE
+extraEnvVars: ""
+
+## @param extraEnvVarsSecret Secret with extra environment variables
+extraEnvVarsSecret: ""
 
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Hive pods
 extraVolumeMounts: []
@@ -126,11 +133,11 @@ extraVolumes: []
 connections:
   database:
     ## @param connections.database.username [default: hive] Database username
-    username: admin
-    ## @param connections.database.password [default: hive] Database password
-    password: admin
+    username: hive
+    ## @param connections.database.password Database password. Note that one can use 'DATABASE_PASSWORD' environment variable instead.
+    password: ""
     ## @param connections.database.database [default: metastore] Hive database name
-    database: metastore_db
+    database: metastore
     ## @param connections.database.host Databas host
     host: "{{ .Release.Name }}-postgresql"
     ## @param connections.database.port [default: 5432] Database port
@@ -142,7 +149,11 @@ conf:
   hiveSite:
     # Define tmp folder for hdfs since we only have metastore here.
     # If not set, default hive.metastore.warehouse.dir is default to: "hdfs://{{.Release.Name}}-hdfs:8020/user/hive/warehouse"
-    hive.metastore.warehouse.dir: s3a://warehouse/metastore
+    hive.metastore.warehouse.dir: "file:///tmp"
+  ## @param conf.hiveSiteSecret Name of secret containing extra hive-site configuration. Will be mounted as hivemetastore-site.xml file
+  hiveSiteSecret: ""
+  ## @param conf.hiveSiteSecretKey Key in secret containing extra hive-site configuration
+  hiveSiteSecretKey: "hivemetastore-site.xml"
 
 ## Specific configuration of hadoop-aws plugin
 ## ref: https://hadoop.apache.org/docs/current/hadoop-aws/tools/hadoop-aws/index.html
@@ -151,13 +162,13 @@ objectStore:
   sslEnabled: false
 
   ## @param objectStore.endpoint Value of fs.s3a.endpoint in hive-site.xml file
-  endpoint: http://bigdata-storage-hl.deepstore-bigdata.svc.cluster.local:9000
+  endpoint:
 
   ## @param objectStore.accessKeyId Value of fs.s3a.access.key in hive-site.xml file
-  accessKeyId: 8qz4AQzbQLGwTxWEfSps
+  accessKeyId:
 
   ## @param objectStore.secretAccessKey Value of fs.s3a.secret.key in hive-site.xml file
-  secretAccessKey: KJNMWxEwxpR30cXktr4xBZUiry2Ni1U0Gwn2Be0C
+  secretAccessKey:
 
   ## @param objectStore.pathStyle [default: true] Value of fs.s3a.path.style.access in hive-site.xml file
   pathStyle: true
@@ -197,9 +208,9 @@ postgresql:
   global:
     postgresql:
       auth:
-        username: admin
-        password: admin
-        database: metastore_db
+        username: hive
+        password: hive
+        database: metastore
 
   primary:
     ##
@@ -211,7 +222,7 @@ postgresql:
       enabled: true
       ##
       ## Persistent class
-      storageClass: gp2
+      # storageClass: classname
       ##
       ## Access modes:
       ## @param postgresql.primary.persistence.accessModes PVC Access Mode for PostgreSQL volume

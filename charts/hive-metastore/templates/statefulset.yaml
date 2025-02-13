@@ -47,11 +47,20 @@ spec:
               value: "{{- .Values.connections.database.database }}"
             - name: DATABASE_USER
               value: "{{- .Values.connections.database.username }}"
+            {{- if .Values.connections.database.password }}
             - name: DATABASE_PASSWORD
               value: "{{- .Values.connections.database.password }}"
-            {{- if .Values.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- .Values.extraEnvVars | nindent 12 }}
+            {{- end }}
+          {{- if .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: "{{- .Values.extraEnvVarsSecret  }}"
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -61,19 +70,29 @@ spec:
           volumeMounts:
             - name: hive-config
               mountPath: /opt/hive/conf
+              readOnly: true
             - name: warehouse-dir
               mountPath: /opt/hive/warehouse
             {{- if .Values.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- tpl .Values.extraVolumeMounts .context | nindent 12 }}
             {{- end }}
       volumes:
         - name: hive-config
-          configMap:
-            name: {{ include "hive-metastore.fullname" . }}
+          projected:
+            sources:
+              - configMap:
+                  name: {{ include "hive-metastore.fullname" . }}
+              {{- if .Values.conf.hiveSiteSecret }}
+              - secret:
+                  name: {{ .Values.conf.hiveSiteSecret }}
+                  items:
+                    - key: {{ .Values.conf.hiveSiteSecretKey }}
+                      path: hivemetastore-site.xml
+              {{- end }}
         - name: warehouse-dir
           emptyDir: {}
         {{- if .Values.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- tpl .Values.extraVolumes .context | nindent 8 }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

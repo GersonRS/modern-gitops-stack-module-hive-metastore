@@ -56,9 +56,9 @@ locals {
         database = {
           # password = "hive"
           username = "${var.database.user}hive"
-          password = "${var.database.password}"
-          database = "${var.database.database}"
-          host     = "${var.database.service}"
+          password = var.database.password
+          database = var.database.database
+          host     = var.database.service
           port     = 5432
         }
       }
